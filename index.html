@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="manifest" href="manifest.json">
+  <meta name="theme-color" content="#17212b">
+  <title>Open Media Hub: free Creative Commons audio and video</title>
+  <link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:wght@600;800&family=Public+Sans:wght@400;600&display=swap" rel="stylesheet">
+  <!-- Tailwind Play CDN keeps this build-free. For heavy traffic, swap in the Tailwind CLI. -->
+  <script src="https://cdn.tailwindcss.com/3.4.17"></script>
+  <style>
+    body { font-family: 'Public Sans', system-ui, sans-serif; }
+    .display { font-family: 'Bricolage Grotesque', system-ui, sans-serif; }
+    input[type=range] { accent-color: #1f7a6b; }
+    :focus-visible { outline: 2px solid #1f7a6b; outline-offset: 2px; }
+    @media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+  </style>
+</head>
+<body class="bg-[#e9eeea] text-[#17212b] min-h-screen pb-56">
+  <header class="max-w-3xl mx-auto px-4 pt-10 pb-6">
+    <h1 class="display text-4xl sm:text-5xl font-extrabold tracking-tight">Open Media Hub</h1>
+    <p class="mt-2 text-[#52625c]">Audio and video you can legally reuse. No ads, no account.</p>
+
+    <!-- Search + filters -->
+    <form id="search-form" class="mt-6 grid gap-3 sm:grid-cols-[1fr_auto]">
+      <input id="q" type="search" placeholder="Search music, speeches, sounds…" aria-label="Search"
+             class="px-4 py-3 bg-white border border-[#b3c0b8]">
+      <button class="px-6 py-3 bg-[#17212b] text-white font-semibold hover:bg-black">Search</button>
+      <div class="flex flex-wrap gap-3 sm:col-span-2">
+        <select id="type" aria-label="Media type" class="px-3 py-2 bg-white border border-[#b3c0b8]">
+          <option value="audio">Audio</option><option value="video">Video</option>
+        </select>
+        <select id="genre" aria-label="Genre" class="px-3 py-2 bg-white border border-[#b3c0b8]">
+          <option value="">Any genre</option>
+          <option>ambient</option><option>classical</option><option>electronic</option><option>folk</option>
+          <option>hiphop</option><option>jazz</option><option>pop</option><option>rock</option>
+        </select>
+        <select id="lang" aria-label="Language" class="px-3 py-2 bg-white border border-[#b3c0b8]">
+          <option value="">Any language</option>
+          <option value="en">English</option><option value="es">Spanish</option><option value="fr">French</option>
+          <option value="de">German</option><option value="hi">Hindi</option><option value="bn">Bengali</option>
+          <option value="ja">Japanese</option>
+        </select>
+        <button id="lib-btn" type="button" class="px-3 py-2 border border-[#17212b] font-semibold hover:bg-white">My saved music</button>
+      </div>
+    </form>
+  </header>
+
+  <main class="max-w-3xl mx-auto px-4">
+    <p id="notice" class="min-h-6 text-sm text-[#52625c]" aria-live="polite"></p>
+    <ul id="results"></ul>
+    <button id="more" class="hidden mt-6 px-5 py-2 border border-[#17212b] font-semibold hover:bg-white">Load more</button>
+  </main>
+
+  <!-- Sticky player: one <video> element serves audio and video; controls are custom. -->
+  <section class="fixed bottom-0 inset-x-0 bg-[#17212b] text-white" aria-label="Player">
+    <div class="max-w-3xl mx-auto px-4 py-3">
+      <div id="video-wrap" class="hidden mb-3"><!-- visible only for video tracks -->
+        <video id="media" playsinline class="w-full max-h-56 bg-black"></video>
+      </div>
+      <p id="title" class="font-semibold truncate">Pick something to play</p>
+      <p id="status" class="text-sm text-[#a9bab2]" aria-live="polite"></p>
+      <div class="mt-2 flex items-center gap-3">
+        <button id="toggle" class="w-20 py-2 bg-[#1f7a6b] font-semibold">Play</button>
+        <input id="seek" type="range" min="0" max="0" step="0.1" value="0" aria-label="Seek" class="flex-1">
+        <span id="time" class="text-xs tabular-nums w-24 text-right">0:00 / 0:00</span>
+      </div>
+      <div class="mt-2 flex items-center gap-3">
+        <label class="text-sm" for="vol">Volume</label>
+        <input id="vol" type="range" min="0" max="1" step="0.05" value="1" class="w-32">
+        <button id="dl" class="ml-auto px-4 py-2 border border-white/60 font-semibold hover:bg-white hover:text-[#17212b]">Download</button>
+      </div>
+    </div>
+  </section>
+
+  <script type="module" src="js/app.js"></script>
+  <script>if ("serviceWorker" in navigator) navigator.serviceWorker.register("sw.js");</script>
+</body>
+</html>
